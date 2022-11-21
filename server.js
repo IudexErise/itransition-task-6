@@ -10,12 +10,27 @@ const io = require('socket.io')(server, {
 })
 const cors = require("cors");
 
+app.use(express.json());
+
 const rooms = new Map();
 
 app.use(cors())
 
 app.get('/rooms', (req, res) => {
   res.json(rooms);
+});
+
+app.post('/rooms', (req, res) => {
+  const { senderName, recipientName } = req.body;
+  if (!rooms.has(recipientName)) {
+    rooms.set(
+      recipientName,
+      new Map([
+        ['users', new Map()],
+        ['messages', []]
+      ]));
+  }
+  res.send();
 });
 
 io.on('connection', socket => {
