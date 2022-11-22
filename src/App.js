@@ -3,6 +3,7 @@ import LoginPage from './LoginPage/LoginPage';
 import './App.css';
 import reducer from './reducer';
 import socket from './socket';
+import DialogPage from './DialogPage/DialogPage';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, {
@@ -27,13 +28,13 @@ function App() {
       dispatch({
         type: 'SET_USERS',
         payload: users
-      })
+      });
     });
-  }, [])
+  }, []);
 
   return (
     <main className="text-center">
-      {!state.joined && <LoginPage onSignIn={onSignIn} />}
+      {!state.joined ? <LoginPage onSignIn={onSignIn} /> : <DialogPage />}
     </main>
   );
 }
