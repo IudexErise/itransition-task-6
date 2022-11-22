@@ -1,23 +1,39 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import LoginPage from './LoginPage/LoginPage';
 import './App.css';
 import reducer from './reducer';
+import socket from './socket';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, {
-    isAuthenticated: false,
+    joined: false,
+    senderName: null,
+    recipientName: null,
+    users: [],
+    messages: []
   });
 
-  const onSignIn = () => {
+  const onSignIn = (obj) => {
     dispatch({
-      type: 'IS_AUTHENTICATED',
-      payload: true
+      type: 'JOINED',
+      payload: obj
     });
+    socket.emit('ROOM:JOIN', obj);
   };
+  
+
+  useEffect(() => {
+    socket.on('ROOM:JOINED', (users) => {
+      dispatch({
+        type: 'SET_USERS',
+        payload: users
+      })
+    });
+  }, [])
 
   return (
     <main className="text-center">
-      {!state.isAuthenticated && <LoginPage onSignIn={onSignIn} />}
+      {!state.joined && <LoginPage onSignIn={onSignIn} />}
     </main>
   );
 }

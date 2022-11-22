@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './LoginPage.css';
-import socket from '../socket';
 import axios from 'axios';
 
 function LoginPage({ onSignIn }) {
@@ -13,11 +12,13 @@ function LoginPage({ onSignIn }) {
       return alert('Please, fill in both inputs!')
     }
     setLoading(true);
-    await axios
-      .post('/rooms', {
-        senderName,
-        recipientName
-      }).then(onSignIn);
+    const obj = {
+      senderName,
+      recipientName
+    };
+    setLoading(true);
+    await axios.post('/rooms', obj);
+    onSignIn(obj);
   };
 
   return (

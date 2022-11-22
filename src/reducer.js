@@ -1,10 +1,25 @@
 export default (state, action) => {
   switch (action.type) {
-    case 'IS_AUTHENTICATED':
+    case 'JOINED':
       return {
         ...state,
-        isAuthenticated: action.payload
+        joined: true,
+        senderName: action.payload.senderName,
+        recipientName: action.payload.recipientName
       };
+
+    case 'SET_USERS':
+      return {
+        ...state,
+        users: action.payload,
+      };
+
+    case 'SET_MESSAGES':
+      return {
+        ...state,
+        messages: action.payload,
+      };
+
     default:
       return state;
 
