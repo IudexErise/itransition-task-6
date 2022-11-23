@@ -4,6 +4,7 @@ import './App.css';
 import reducer from './reducer';
 import socket from './socket';
 import DialogPage from './DialogPage/DialogPage';
+import axios from 'axios';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, {
@@ -14,27 +15,47 @@ function App() {
     messages: []
   });
 
-  const onSignIn = (obj) => {
+  const onSignIn = async (obj) => {
     dispatch({
       type: 'JOINED',
       payload: obj
     });
     socket.emit('ROOM:JOIN', obj);
+    const { data } = await axios.get(`/rooms/${obj.recipientName}`);
+    dispatch({
+      type: 'SET_DATA',
+      payload: data,
+    });
   };
-  
+
+  const setUsers = (users) => {
+    dispatch({
+      type: 'SET_USERS',
+      payload: users,
+    });
+  };
+
+  const addMessage = (message) => {
+    dispatch({
+      type: 'NEW_MESSAGE',
+      payload: message
+    });
+  };
+
 
   useEffect(() => {
-    socket.on('ROOM:JOINED', (users) => {
-      dispatch({
-        type: 'SET_USERS',
-        payload: users
-      });
-    });
+    socket.on('ROOM:SET_USERS', setUsers);
+    socket.on('ROOM:NEW_MESSAGE', addMessage);
   }, []);
+
+  window.socket = socket;
 
   return (
     <main className="text-center">
-      {!state.joined ? <LoginPage onSignIn={onSignIn} /> : <DialogPage />}
+      {!state.joined ?
+        <LoginPage onSignIn={onSignIn} />
+        :
+        <DialogPage {...state} onAddMessage={addMessage} />}
     </main>
   );
 }

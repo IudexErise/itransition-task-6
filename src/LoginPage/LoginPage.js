@@ -11,7 +11,6 @@ function LoginPage({ onSignIn }) {
     if (!senderName || !recipientName) {
       return alert('Please, fill in both inputs!')
     }
-    setLoading(true);
     const obj = {
       senderName,
       recipientName

@@ -8,20 +8,26 @@ export default (state, action) => {
         recipientName: action.payload.recipientName
       };
 
+      case 'SET_DATA':
+      return {
+        ...state,
+        users: action.payload.users,
+        messages: action.payload.messages,
+      };
+
     case 'SET_USERS':
       return {
         ...state,
         users: action.payload,
       };
 
-    case 'SET_MESSAGES':
+    case 'NEW_MESSAGES':
       return {
         ...state,
-        messages: action.payload,
+        messages: [...state.messages, action.payload],
       };
 
     default:
       return state;
-
   }
 }
