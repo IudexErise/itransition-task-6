@@ -1,6 +1,7 @@
 const express = require('express');
+
 const app = express();
-const server = require('http').createServer(app);
+const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 app.use(express.json());
@@ -37,15 +38,17 @@ io.on('connection', (socket) => {
     socket.join(recipientName);
     rooms.get(recipientName).get('users').set(socket.id, senderName);
     const users = [...rooms.get(recipientName).get('users').values()];
+    /* io.in(recipientName).emit('ROOM:SET_USERS', users); */
     socket.broadcast.to(recipientName).emit('ROOM:SET_USERS', users);
   });
 
   socket.on('ROOM:NEW_MESSAGE', ({ recipientName, senderName, text }) => {
     const obj = {
       senderName,
-      text
+      text,
     };
     rooms.get(recipientName).get('messages').push(obj);
+    /* io.in(recipientName).emit('ROOM:NEW_MESSAGE', obj); */
     socket.broadcast.to(recipientName).emit('ROOM:NEW_MESSAGE', obj);
   });
 
@@ -53,7 +56,8 @@ io.on('connection', (socket) => {
     rooms.forEach((value, recipientName) => {
       if (value.get('users').delete(socket.id)) {
         const users = [...value.get('users').values()];
-        socket.to(recipientName).broadcast.emit('ROOM:SET_USERS', users);
+        /* io.in(recipientName).emit('ROOM:SET_USERS', users); */
+        socket.broadcast.to(recipientName).emit('ROOM:SET_USERS', users);
       }
     });
   });

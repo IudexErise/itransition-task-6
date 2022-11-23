@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import './DialogPage.css';
 import socket from "../socket";
 
 function DialogPage({ users, messages, senderName, recipientName, onAddMessage }) {
   const [messageValue, setMessageValue] = useState('');
-  const messagesRef = useRef(null);
+  
+  
 
   const onSendMessage = () => {
     socket.emit('ROOM:NEW_MESSAGE', {
@@ -12,29 +13,14 @@ function DialogPage({ users, messages, senderName, recipientName, onAddMessage }
       recipientName,
       text: messageValue
     });
-    onAddMessage({
-      senderName,
-      text: messageValue
-    })
+    onAddMessage({senderName, text: messageValue});
     setMessageValue('');
   };
 
-  useEffect(() => {
-    messagesRef.current.scrollTo(0, 99999);
-  }, [messages]);
+ 
 
   return (
-    <main className="container ">
-      <div ref={messagesRef} >
-        {messages.map((message) => (
-          <div>
-            <p>{message.text}</p>
-            <div>
-              <span>{message.senderName}</span>
-            </div>
-          </div>
-        ))}
-      </div>
+    <main className="container ">      
       <div className="form-floating mb-3 w-75">
         <input
           type="text"
@@ -61,6 +47,16 @@ function DialogPage({ users, messages, senderName, recipientName, onAddMessage }
       >
         Send
       </button>
+      <div>
+        {messages.map((message) => (
+          <>
+            <p>{message.text}</p>
+            <div>
+              <span>{message.senderName}</span>
+            </div>
+            </>
+        ))}
+      </div>
     </main>
   )
 }

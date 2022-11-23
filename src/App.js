@@ -18,7 +18,7 @@ function App() {
   const onSignIn = async (obj) => {
     dispatch({
       type: 'JOINED',
-      payload: obj
+      payload: obj,
     });
     socket.emit('ROOM:JOIN', obj);
     const { data } = await axios.get(`/rooms/${obj.recipientName}`);
@@ -38,7 +38,7 @@ function App() {
   const addMessage = (message) => {
     dispatch({
       type: 'NEW_MESSAGE',
-      payload: message
+      payload: message,
     });
   };
 
@@ -52,10 +52,11 @@ function App() {
 
   return (
     <main className="text-center">
-      {!state.joined ?
+      {!state.joined ? (
         <LoginPage onSignIn={onSignIn} />
-        :
-        <DialogPage {...state} onAddMessage={addMessage} />}
+       ) : (
+        <DialogPage {...state} onAddMessage={addMessage} />
+      )}
     </main>
   );
 }

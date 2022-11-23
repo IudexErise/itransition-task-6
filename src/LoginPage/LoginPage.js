@@ -13,7 +13,7 @@ function LoginPage({ onSignIn }) {
     }
     const obj = {
       senderName,
-      recipientName
+      recipientName,
     };
     setLoading(true);
     await axios.post('/rooms', obj);
@@ -30,7 +30,7 @@ function LoginPage({ onSignIn }) {
             className="form-control"
             id="from"
             value={senderName}
-            onChange={e => setSenderName(e.target.value)}
+            onChange={(e) => setSenderName(e.target.value)}
           />
           <label for="from">Your name</label>
         </div>
@@ -41,7 +41,7 @@ function LoginPage({ onSignIn }) {
             className="form-control"
             id="to"
             value={recipientName}
-            onChange={e => setRecipientName(e.target.value)}
+            onChange={(e) => setRecipientName(e.target.value)}
           />
           <label for="to">Name of recipient</label>
         </div>
