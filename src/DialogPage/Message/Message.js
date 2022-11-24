@@ -7,7 +7,7 @@ function Message ({text, senderName, topic, date}) {
   return (
     <div className="container message">
       <div><b>From: {senderName}</b></div>
-      <div onClick={() =>setToggleText(!toggleText)}><i>About: {topic}</i></div>
+      <div onClick={() =>setToggleText(!toggleText)}><i>About: {topic} (click to expend)</i></div>
       {toggleText && <div>{text}</div>}
       <div>{date}</div>      
     </div>

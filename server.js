@@ -4,6 +4,15 @@ const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
+const PORT = process.env.PORT || 5000;
+
+/* const publicPath = path.join(__dirname, '..', 'public');
+app.use(express.static(publicPath));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+}); */
+
 app.use(express.json());
 
 const rooms = new Map();
@@ -62,7 +71,7 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(7777, (err) => {
+server.listen(PORT, (err) => {
   if (err) {
     throw Error(err);
   }
