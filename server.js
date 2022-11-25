@@ -6,7 +6,7 @@ const io = require('socket.io')(server);
 
 const PORT = process.env.PORT || 5000;
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, '/build')));
 
 app.use(express.json());
 
